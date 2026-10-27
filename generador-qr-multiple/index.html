@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generador QR Multiusos</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1><i class="fas fa-qrcode"></i> Generador QR Multiusos</h1>
+      <p>Crea códigos QR para compartir información fácilmente</p>
+    </div>
+
+    <div class="main-content">
+      <div class="left-panel">
+        <div class="tabs">
+          <button class="tab-btn active" data-tab="wifi"><i class="fas fa-wifi"></i> WiFi</button>
+          <button class="tab-btn" data-tab="url"><i class="fas fa-link"></i> Enlace</button>
+          <button class="tab-btn" data-tab="text"><i class="fas fa-font"></i> Texto</button>
+          <button class="tab-btn" data-tab="vcard"><i class="fas fa-address-card"></i> vCard</button>
+          <button class="tab-btn" data-tab="event"><i class="fas fa-calendar"></i> Evento</button>
+          <button class="tab-btn" data-tab="whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</button>
+          <button class="tab-btn" data-tab="email"><i class="fas fa-envelope"></i> Email</button>
+          <button class="tab-btn" data-tab="sms"><i class="fas fa-comment"></i> SMS</button>
+          <button class="tab-btn" data-tab="phone"><i class="fas fa-phone"></i> Teléfono</button>
+          <button class="tab-btn" data-tab="location"><i class="fas fa-map-marker-alt"></i> Ubicación</button>
+        </div>
+
+        <div class="card">
+          <form id="qr-form">
+            <!-- WiFi Tab Content -->
+            <div class="tab-content active" id="wifi-tab">
+              <div class="form-group">
+                <div class="input-group">
+                  <label for="wifi-ssid">
+                    <i class="fas fa-network-wired"></i> Nombre de la red (SSID)
+                  </label>
+                  <input type="text" id="wifi-ssid" class="form-input" placeholder="Ej: MiWiFi" required>
+                </div>
+
+                <div class="input-group">
+                  <label for="wifi-password">
+                    <i class="fas fa-lock"></i> Contraseña
+                  </label>
+                  <div class="password-input">
+                    <input type="password" id="wifi-password" class="form-input" placeholder="Ej: MiContraseña123">
+                    <button type="button" id="wifi-toggle-password" class="toggle-password">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="input-group">
+                  <label for="wifi-encryption">
+                    <i class="fas fa-shield-alt"></i> Tipo de seguridad
+                  </label>
+                  <select id="wifi-encryption" class="form-input">
+                    <option value="WPA">WPA/WPA2</option>
+                    <option value="WEP">WEP</option>
+                    <option value="nopass">Sin contraseña</option>
+                  </select>
+                </div>
+
+                <div class="input-group">
+                  <label for="wifi-hidden">
+                    <input type="checkbox" id="wifi-hidden" class="checkbox">
+                    Red oculta
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- URL Tab Content -->
+            <div class="tab-content" id="url-tab">
+              <div class="form-group">
+                <div class="input-group">
+                  <label for="url-input">
+                    <i class="fas fa-link"></i> URL del enlace
+                  </label>
+                  <input type="url" id="url-input" class="form-input" placeholder="https://ejemplo.com" required>
+                </div>
+              </div>
+            </div>
+
+            <!-- Text Tab Content -->
+            <div class="tab-content" id="text-tab">
+              <div class="form-group">
+                <div class="input-group">
+                  <label for="text-input">
+                    <i class="fas fa-font"></i> Texto plano
+                  </label>
+                  <textarea id="text-input" class="form-input" rows="5" placeholder="Introduce el texto que quieres codificar"></textarea>
+                </div>
+              </div>
+            </div>
+
+            <!-- vCard Tab Content -->
+            <div class="tab-content" id="vcard-tab">
+              <div class="form-group">
+                <div class="input-group">
+                  <label for="vcard-type">
+                    <i class="fas fa-user-tag"></i> Tipo de vCard
+                  </label>
+                  <select id="vcard-type" class="form-input">
+                    <option value="personal">Personal</option>
+                    <option value="business">Empresa</option>
+                  </select>
+                </div>
+
+                <div class="input-group">
+                  <label for="vcard-name">
+                    <i class="fas fa-user"></i> Nombre completo
+                  </label>
+                  <input type="text" id="vcard-name" class="form-input" placeholder="Juan Pérez" required>
+                </div>
+
+                <div class="input-group">
+                  <label for="vcard-org">
+                    <i class="fas fa-building"></i> Organización/Empresa
+                  </label>
+                  <input type="text" id="vcard-org" class="form-input" placeholder="Empresa S.A.">
+                </div>
+
+                <div class="input-group">
+                  <label for="vcard-title">
+                    <i class="fas fa-briefcase"></i> Cargo/Puesto
+                  </label>
+                  <input type="text" id="vcard-title" class="form-input" placeholder="Gerente">
+                </div>
+
+                <div class="input-group">
+                  <label for="vcard-phone">
+                    <i class="fas fa-phone"></i> Teléfono
+                  </label>
+                  <input type="tel" id="vcard-phone" class="form-input" placeholder="+34 600 000 000">
+                </div>
+
+                <div class="input-group">
+                  <label for="vcard-email">
+                    <i class="fas fa-envelope"></i> Email
+                  </label>
+                  <input type="email" id="vcard-email" class="form-input" placeholder="email@ejemplo.com">
+                </div>
+
+                <div class="input-group">
+                  <label for="vcard-web">
+                    <i class="fas fa-globe"></i> Sitio web
+                  </label>
+                  <input type="url" id="vcard-web" class="form-input" placeholder="https://ejemplo.com">
+                </div>
+
+                <div class="input-group">
+                  <label for="vcard-address">
+                    <i class="fas fa-map-marker-alt"></i> Dirección
+                  </label>
+                  <input type="text" id="vcard-address" class="form-input" placeholder="Calle Ejemplo 123, Ciudad, País">
+                </div>
+              </div>
+            </div>
+
+            <!-- Event Tab Content -->
+            <div class="tab-content" id="event-tab">
+              <div class="form-group">
+                <div class="input-group">
+                  <label for="event-title">
+                    <i class="fas fa-heading"></i> Título del evento
+                  </label>
+                  <input type="text" id="event-title" class="form-input" placeholder="Reunión de equipo" required>
+                </div>
+
+                <div class="input-group">
+                  <label for="event-start">
+                    <i class="fas fa-calendar-plus"></i> Fecha y hora de inicio
+                  </label>
+                  <input type="datetime-local" id="event-start" class="form-input" required>
+                </div>
+
+                <div class="input-group">
+                  <label for="event-end">
+                    <i class="fas fa-calendar-minus"></i> Fecha y hora de fin
+                  </label>
+                  <input type="datetime-local" id="event-end" class="form-input" required>
+                </div>
+
+                <div class="input-group">
+                  <label for="event-location">
+                    <i class="fas fa-map-marker-alt"></i> Ubicación
+                  </label>
+                  <input type="text" id="event-location" class="form-input" placeholder="Oficina central, Sala de reuniones">
+                </div>
+
+                <div class="input-group">
+                  <label for="event-description">
+                    <i class="fas fa-align-left"></i> Descripción
+                  </label>
+                  <textarea id="event-description" class="form-input" rows="3" placeholder="Detalles del evento"></textarea>
+                </div>
+              </div>
+            </div>
+
+            <!-- WhatsApp Tab Content -->
+            <div class="tab-content" id="whatsapp-tab">
+              <div class="form-group">
+                <div class="input-group">
+                  <label for="whatsapp-number">
+                    <i class="fas fa-phone"></i> Número de teléfono
+                  </label>
+                  <input type="tel" id="whatsapp-number" class="form-input" placeholder="+34 600 000 000" required>
+                </div>
+
+                <div class="input-group">
+                  <label for="whatsapp-message">
+                    <i class="fas fa-comment"></i> Mensaje predefinido
+                  </label>
+                  <textarea id="whatsapp-message" class="form-input" rows="3" placeholder="Hola, me gustaría obtener más información sobre..."></textarea>
+                </div>
+              </div>
+            </div>
+
+            <!-- Email Tab Content -->
+            <div class="tab-content" id="email-tab">
+              <div class="form-group">
+                <div class="input-group">
+                  <label for="email-to">
+                    <i class="fas fa-envelope"></i> Email destinatario
+                  </label>
+                  <input type="email" id="email-to" class="form-input" placeholder="email@ejemplo.com" required>
+                </div>
+
+                <div class="input-group">
+                  <label for="email-subject">
+                    <i class="fas fa-heading"></i> Asunto
+                  </label>
+                  <input type="text" id="email-subject" class="form-input" placeholder="Asunto del correo">
+                </div>
+
+                <div class="input-group">
+                  <label for="email-body">
+                    <i class="fas fa-align-left"></i> Cuerpo del mensaje
+                  </label>
+                  <textarea id="email-body" class="form-input" rows="5" placeholder="Contenido del correo"></textarea>
+                </div>
+              </div>
+            </div>
+
+            <!-- SMS Tab Content -->
+            <div class="tab-content" id="sms-tab">
+              <div class="form-group">
+                <div class="input-group">
+                  <label for="sms-number">
+                    <i class="fas fa-phone"></i> Número de teléfono
+                  </label>
+                  <input type="tel" id="sms-number" class="form-input" placeholder="+34 600 000 000" required>
+                </div>
+
+                <div class="input-group">
+                  <label for="sms-message">
+                    <i class="fas fa-comment"></i> Mensaje
+                  </label>
+                  <textarea id="sms-message" class="form-input" rows="3" placeholder="Contenido del SMS"></textarea>
+                </div>
+              </div>
+            </div>
+
+            <!-- Phone Tab Content -->
+            <div class="tab-content" id="phone-tab">
+              <div class="form-group">
+                <div class="input-group">
+                  <label for="phone-number">
+                    <i class="fas fa-phone"></i> Número de teléfono
+                  </label>
+                  <input type="tel" id="phone-number" class="form-input" placeholder="+34 600 000 000" required>
+                </div>
+              </div>
+            </div>
+
+            <!-- Location Tab Content -->
+            <div class="tab-content" id="location-tab">
+              <div class="form-group">
+                <div class="input-group">
+                  <label for="location-latitude">
+                    <i class="fas fa-map-pin"></i> Latitud
+                  </label>
+                  <input type="number" id="location-latitude" class="form-input" placeholder="40.4168" step="0.000001" required>
+                </div>
+
+                <div class="input-group">
+                  <label for="location-longitude">
+                    <i class="fas fa-map-pin"></i> Longitud
+                  </label>
+                  <input type="number" id="location-longitude" class="form-input" placeholder="-3.7038" step="0.000001" required>
+                </div>
+
+                <div class="input-group">
+                  <label for="location-query">
+                    <i class="fas fa-search"></i> O buscar por dirección
+                  </label>
+                  <div class="search-group">
+                    <input type="text" id="location-query" class="form-input" placeholder="Plaza Mayor, Madrid, España">
+                    <button type="button" id="location-search" class="btn secondary">
+                      <i class="fas fa-search"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="actions">
+              <button type="button" id="generate-btn" class="btn primary">
+                <i class="fas fa-qrcode"></i> Generar QR
+              </button>
+              <button type="button" id="print-btn" class="btn secondary">
+                <i class="fas fa-print"></i> Imprimir
+              </button>
+              <button type="button" id="download-btn" class="btn secondary">
+                <i class="fas fa-download"></i> Descargar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="right-panel">
+        <div class="card">
+          <div class="qr-container">
+            <div class="qr-wrapper">
+              <img id="qr-code" width="200" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=WIFI:T:WPA;S:;P:;;" alt="Código QR">
+              <div class="loading-overlay" id="loading">
+                <i class="fas fa-spinner fa-spin"></i>
+              </div>
+            </div>
+            <div class="qr-info">
+              <p><i class="fas fa-camera"></i> Escanea con tu dispositivo para acceder</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="instructions">
+          <h3><i class="fas fa-info-circle"></i> ¿Cómo funciona?</h3>
+          <ol>
+            <li>Selecciona el tipo de contenido que quieres compartir</li>
+            <li>Rellena los campos correspondientes</li>
+            <li>Genera el código QR con el botón correspondiente</li>
+            <li>Escanea el código con tu dispositivo para acceder al contenido</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="./script.js"></script>
+</body>
+</html>

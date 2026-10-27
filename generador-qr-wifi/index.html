@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generador QR WiFi</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1><i class="fas fa-wifi"></i> Generador QR WiFi</h1>
+      <p>Crea códigos QR para compartir tu conexión WiFi fácilmente</p>
+    </div>
+
+    <div class="card">
+      <form id="wifi-form">
+        <div class="qr-container">
+          <div class="qr-wrapper">
+            <img id="qr-code" width="200" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=WIFI:T:WPA;S:;P:;;" alt="Código QR WiFi">
+            <div class="loading-overlay" id="loading">
+              <i class="fas fa-spinner fa-spin"></i>
+            </div>
+          </div>
+          <div class="qr-info">
+            <p><i class="fas fa-camera"></i> Escanea con tu dispositivo para conectarte</p>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="input-group">
+            <label for="ssid">
+              <i class="fas fa-network-wired"></i> Nombre de la red (SSID)
+            </label>
+            <input type="text" id="ssid" class="form-input" placeholder="Ej: MiWiFi" required>
+          </div>
+
+          <div class="input-group">
+            <label for="password">
+              <i class="fas fa-lock"></i> Contraseña
+            </label>
+            <div class="password-input">
+              <input type="password" id="password" class="form-input" placeholder="Ej: MiContraseña123">
+              <button type="button" id="toggle-password" class="toggle-password">
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="encryption">
+              <i class="fas fa-shield-alt"></i> Tipo de seguridad
+            </label>
+            <select id="encryption" class="form-input">
+              <option value="WPA">WPA/WPA2</option>
+              <option value="WEP">WEP</option>
+              <option value="nopass">Sin contraseña</option>
+            </select>
+          </div>
+
+          <div class="input-group">
+            <label for="hidden">
+              <input type="checkbox" id="hidden" class="checkbox">
+              Red oculta
+            </label>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="button" id="generate-btn" class="btn primary">
+            <i class="fas fa-qrcode"></i> Generar QR
+          </button>
+          <button type="button" id="print-btn" class="btn secondary">
+            <i class="fas fa-print"></i> Imprimir
+          </button>
+          <button type="button" id="download-btn" class="btn secondary">
+            <i class="fas fa-download"></i> Descargar
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div class="instructions">
+      <h3><i class="fas fa-info-circle"></i> ¿Cómo funciona?</h3>
+      <ol>
+        <li>Introduce el nombre de tu red WiFi (SSID)</li>
+        <li>Añade la contraseña y selecciona el tipo de seguridad</li>
+        <li>Genera el código QR con el botón correspondiente</li>
+        <li>Escanea el código con tu dispositivo para conectarte automáticamente</li>
+      </ol>
+    </div>
+  </div>
+
+  <script src="./script.js"></script>
+</body>
+</html>

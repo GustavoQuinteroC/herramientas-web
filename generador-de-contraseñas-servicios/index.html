@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generador de Contraseñas Corporativas</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root {
+--primary-color: #302b63;
+--secondary-color: #302b63;
+--accent-color: #ff6b6b;
+--success-color: #4caf50;
+--warning-color: #ff9800;
+--danger-color: #f44336;
+--dark-color: #2c3e50;
+--light-color: #f8f9fa;
+--border-radius: 8px;
+--box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+--transition: all 0.3s ease;
+}
+
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+
+body {
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
+min-height: 100vh;
+padding: 20px;
+color: var(--dark-color);
+}
+
+.main-container {
+max-width: 1400px;
+margin: 0 auto;
+}
+
+.header {
+background-color: var(--primary-color);
+color: white;
+padding: 30px;
+text-align: center;
+border-radius: 16px;
+box-shadow: var(--box-shadow);
+margin-bottom: 30px;
+}
+
+.header h1 {
+font-size: 2rem;
+margin-bottom: 10px;
+}
+
+.header p {
+opacity: 0.9;
+font-size: 1.1rem;
+}
+
+.content-wrapper {
+display: grid;
+grid-template-columns: 1fr;
+gap: 30px;
+}
+
+@media (min-width: 992px) {
+.content-wrapper {
+grid-template-columns: 2fr 1fr;
+}
+}
+
+.card {
+background-color: white;
+border-radius: 16px;
+box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+overflow: hidden;
+}
+
+.card-header {
+background-color: var(--primary-color);
+color: white;
+padding: 15px 20px;
+font-weight: 600;
+}
+
+.card-body {
+padding: 25px;
+}
+
+.password-type-selector {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+gap: 15px;
+margin-bottom: 25px;
+}
+
+.password-type-btn {
+padding: 15px;
+border: 2px solid #ddd;
+border-radius: var(--border-radius);
+background-color: white;
+cursor: pointer;
+transition: var(--transition);
+text-align: center;
+}
+
+.password-type-btn:hover {
+border-color: var(--primary-color);
+transform: translateY(-3px);
+}
+
+.password-type-btn.active {
+border-color: var(--primary-color);
+background-color: rgba(48, 43, 99, 0.1);
+}
+
+.password-type-btn i {
+font-size: 24px;
+margin-bottom: 8px;
+display: block;
+color: var(--primary-color);
+}
+
+.instructions {
+background-color: rgba(48, 43, 99, 0.05);
+border-left: 4px solid var(--primary-color);
+padding: 15px;
+border-radius: 0 var(--border-radius) var(--border-radius) 0;
+margin-bottom: 20px;
+}
+
+.instructions h5 {
+color: var(--primary-color);
+margin-bottom: 10px;
+}
+
+.instructions ul {
+margin-bottom: 0;
+padding-left: 20px;
+}
+
+.instructions li {
+margin-bottom: 5px;
+}
+
+.form-group {
+display: grid;
+gap: 20px;
+margin-bottom: 25px;
+}
+
+.input-group {
+display: flex;
+flex-direction: column;
+}
+
+.input-group label {
+margin-bottom: 8px;
+font-weight: 600;
+display: flex;
+align-items: center;
+gap: 8px;
+}
+
+.input-group label i {
+color: var(--primary-color);
+}
+
+.form-input {
+padding: 12px 15px;
+border: 1px solid #ddd;
+border-radius: var(--border-radius);
+font-size: 1rem;
+transition: var(--transition);
+}
+
+.form-input:focus {
+outline: none;
+border-color: var(--primary-color);
+box-shadow: 0 0 0 3px rgba(48, 43, 99, 0.2);
+}
+
+.password-result {
+background-color: var(--light-color);
+border-radius: var(--border-radius);
+padding: 20px;
+margin-top: 20px;
+position: relative;
+}
+
+.password-display {
+font-family: 'Courier New', monospace;
+font-size: 18px;
+font-weight: 600;
+word-break: break-all;
+padding: 15px;
+background-color: white;
+border-radius: var(--border-radius);
+border: 1px solid #ddd;
+margin-bottom: 15px;
+}
+
+.copy-btn {
+position: absolute;
+top: 20px;
+right: 20px;
+}
+
+.copy-success {
+color: var(--success-color);
+font-weight: 500;
+display: none;
+}
+
+.copy-success.show {
+display: block;
+}
+
+.actions {
+display: flex;
+gap: 10px;
+flex-wrap: wrap;
+justify-content: center;
+}
+
+.btn {
+padding: 12px 20px;
+border: none;
+border-radius: var(--border-radius);
+font-size: 1rem;
+font-weight: 600;
+cursor: pointer;
+transition: var(--transition);
+display: flex;
+align-items: center;
+gap: 8px;
+}
+
+.btn:hover {
+transform: translateY(-2px);
+box-shadow: var(--box-shadow);
+}
+
+.btn.primary {
+background-color: var(--primary-color);
+color: white;
+}
+
+.btn.secondary {
+background-color: var(--light-color);
+color: var(--dark-color);
+border: 1px solid #ddd;
+}
+
+.info-card {
+margin-bottom: 20px;
+}
+
+.timestamp-info {
+display: flex;
+align-items: center;
+margin-bottom: 15px;
+}
+
+.timestamp-icon {
+font-size: 30px;
+margin-right: 10px;
+}
+
+.timestamp-year {
+font-weight: 600;
+font-size: 18px;
+}
+
+.service-badges {
+display: flex;
+flex-wrap: wrap;
+gap: 5px;
+margin-bottom: 15px;
+}
+
+.service-badge {
+display: inline-block;
+padding: 5px 10px;
+background-color: rgba(48, 43, 99, 0.1);
+color: var(--primary-color);
+border-radius: 20px;
+font-size: 12px;
+}
+
+.device-badges {
+display: flex;
+flex-wrap: wrap;
+gap: 5px;
+margin-bottom: 15px;
+}
+
+.device-badge {
+display: inline-block;
+padding: 5px 10px;
+background-color: rgba(48, 43, 99, 0.1);
+color: var(--primary-color);
+border-radius: 20px;
+font-size: 12px;
+}
+
+.field-group {
+margin-bottom: 20px;
+animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+from { opacity: 0; transform: translateY(10px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
+.notification {
+position: fixed;
+top: 20px;
+right: 20px;
+padding: 15px 20px;
+border-radius: var(--border-radius);
+color: white;
+display: flex;
+align-items: center;
+gap: 10px;
+transform: translateX(120%);
+transition: transform 0.3s ease;
+z-index: 1000;
+box-shadow: var(--box-shadow);
+}
+
+.notification.show {
+transform: translateX(0);
+}
+
+.notification.success {
+background-color: var(--success-color);
+}
+
+.notification.warning {
+background-color: var(--warning-color);
+}
+
+.notification i {
+font-size: 1.2rem;
+}
+
+@media (max-width: 991px) {
+.content-wrapper {
+grid-template-columns: 1fr;
+}
+}
+
+@media (max-width: 600px) {
+.header h1 {
+font-size: 1.5rem;
+}
+
+.actions {
+flex-direction: column;
+}
+
+.btn {
+width: 100%;
+justify-content: center;
+}
+}
+</style>
+</head>
+<body>
+<div class="main-container">
+<header class="header">
+<h1><i class="fas fa-key"></i> Generador de Contraseñas Corporativas</h1>
+<p>Sistema de generación de contraseñas basado en palabras clave y marca de tiempo</p>
+</header>
+
+<div class="content-wrapper">
+<!-- Columna principal -->
+<div class="main-column">
+<div class="card">
+<div class="card-header">
+<i class="fas fa-cog me-2"></i> Configuración de Contraseña
+</div>
+<div class="card-body">
+<div class="password-type-selector">
+<div class="password-type-btn active" data-type="base">
+<i class="fas fa-globe"></i>
+<div>BASE</div>
+<small>General</small>
+</div>
+<div class="password-type-btn" data-type="device">
+<i class="fas fa-server"></i>
+<div>DISPOSITIVO</div>
+<small>Equipos</small>
+</div>
+<div class="password-type-btn" data-type="user">
+<i class="fas fa-user"></i>
+<div>USUARIO</div>
+<small>Empresa</small>
+</div>
+<div class="password-type-btn" data-type="admin">
+<i class="fas fa-shield-alt"></i>
+<div>ADMIN</div>
+<small>Administrativo</small>
+</div>
+</div>
+
+<div id="instructions-container">
+<div class="instructions">
+<h5>Contraseña BASE</h5>
+<ul>
+<li>Formato: palabra clave transformada + nombre empresa (mayúsculas) + separador + marca de tiempo (AAMMHHMM)</li>
+<li>Ejemplo: syst3mEMPRESA&24051530</li>
+<li>Uso: contraseñas generales como AnyDesk, RustDesk, bloqueadores USB, correo hosting, etc.</li>
+</ul>
+</div>
+</div>
+
+<form id="password-form">
+<div class="form-group">
+<div class="input-group">
+<label for="company">
+<i class="fas fa-building"></i> Nombre corto de empresa
+</label>
+<input type="text" id="company" class="form-input" placeholder="EMPRESA">
+<small>Se usará en mayúsculas</small>
+</div>
+
+<div class="input-group">
+<label for="separator">
+<i class="fas fa-asterisk"></i> Separador
+</label>
+<input type="text" id="separator" class="form-input" maxlength="1" value="&">
+</div>
+
+<!-- Campos específicos para DISPOSITIVO -->
+<div id="device-fields" class="specific-fields" style="display: none;">
+<div class="input-group">
+<label for="device-type">
+<i class="fas fa-network-wired"></i> Tipo de dispositivo
+</label>
+<select id="device-type" class="form-input">
+<option value="">Seleccionar tipo de dispositivo</option>
+<option value="router">Router</option>
+<option value="switch">Switch</option>
+<option value="server">Server</option>
+<option value="firewall">Firewall</option>
+<option value="ap">Access Point</option>
+<option value="dvr">DVR</option>
+<option value="nas">NAS</option>
+<option value="printer">Printer</option>
+<option value="camera">Cámara IP</option>
+<option value="gateway">Gateway</option>
+</select>
+</div>
+
+<div class="input-group">
+<label for="hostname">
+<i class="fas fa-desktop"></i> Nombre del host/dispositivo
+</label>
+<input type="text" id="hostname" class="form-input" placeholder="ipgqserver">
+<small>Se usará en minúsculas</small>
+</div>
+</div>
+
+<!-- Campos específicos para USUARIO -->
+<div id="user-fields" class="specific-fields" style="display: none;">
+<div class="input-group">
+<label for="firstname">
+<i class="fas fa-user"></i> Nombre
+</label>
+<input type="text" id="firstname" class="form-input" placeholder="Gustavo">
+</div>
+
+<div class="input-group">
+<label for="lastname">
+<i class="fas fa-user"></i> Primer apellido
+</label>
+<input type="text" id="lastname" class="form-input" placeholder="Quintero">
+</div>
+
+<div class="input-group">
+<label for="user-service">
+<i class="fas fa-cogs"></i> Servicio
+</label>
+<select id="user-service" class="form-input">
+<option value="">Seleccionar servicio</option>
+<option value="sv1">Usuarios de servidores</option>
+<option value="of">Office</option>
+<option value="gm">Gmail</option>
+<option value="co">Correo IMAP/POP</option>
+<option value="ms">Mensajería interna</option>
+<option value="rd">RustDesk</option>
+<option value="erp">ERP</option>
+<option value="custom">Personalizado</option>
+</select>
+</div>
+
+<div class="input-group" id="custom-service-group" style="display: none;">
+<label for="custom-service">
+<i class="fas fa-cog"></i> Servicio personalizado
+</label>
+<input type="text" id="custom-service" class="form-input" placeholder="Nombre del servicio">
+</div>
+</div>
+
+<!-- Campos específicos para ADMIN -->
+<div id="admin-fields" class="specific-fields" style="display: none;">
+<div class="input-group">
+<label for="admin-service">
+<i class="fas fa-shield-alt"></i> Nombre del servicio
+</label>
+<input type="text" id="admin-service" class="form-input" placeholder="esset">
+</div>
+</div>
+</div>
+
+<div class="actions">
+<button type="button" id="generate-btn" class="btn primary">
+<i class="fas fa-key"></i> Generar Contraseña
+</button>
+<button type="button" id="reset-btn" class="btn secondary">
+<i class="fas fa-redo"></i> Restablecer
+</button>
+<button type="button" id="copy-btn" class="btn secondary">
+<i class="fas fa-copy"></i> Copiar
+</button>
+</div>
+</form>
+
+<div class="password-result">
+<div class="password-display" id="password-display">
+Presiona "Generar Contraseña" para crear una nueva contraseña
+</div>
+<div class="copy-success" id="copy-success">
+<i class="fas fa-check-circle"></i> Contraseña copiada al portapapeles
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Columna lateral -->
+<div class="sidebar">
+<div class="card info-card">
+<div class="card-header">
+<i class="fas fa-clock me-2"></i> Información de Marca de Tiempo
+</div>
+<div class="card-body">
+<div class="timestamp-info">
+<div class="timestamp-icon" id="timestamp-icon">🕐</div>
+<div>
+<div class="timestamp-year" id="current-time">Cargando...</div>
+<div id="timestamp-format">Formato: AAMMHHMM (Año, Mes, Hora, Minutos)</div>
+</div>
+</div>
+<p>La marca de tiempo se genera automáticamente con la fecha y hora actual cuando creas una contraseña.</p>
+</div>
+</div>
+
+<div class="card info-card">
+<div class="card-header">
+<i class="fas fa-list me-2"></i> Abreviaciones de Servicios
+</div>
+<div class="card-body">
+<div class="service-badges">
+<span class="service-badge">sv1: Usuarios de servidores</span>
+<span class="service-badge">of: Office</span>
+<span class="service-badge">gm: Gmail</span>
+<span class="service-badge">co: Correo IMAP/POP</span>
+<span class="service-badge">ms: Mensajería interna</span>
+<span class="service-badge">rd: RustDesk</span>
+<span class="service-badge">erp: ERP</span>
+</div>
+<p>Puedes agregar más servicios según sea necesario.</p>
+</div>
+</div>
+
+<div class="card info-card">
+<div class="card-header">
+<i class="fas fa-network-wired me-2"></i> Palabras Clave de Dispositivos
+</div>
+<div class="card-body">
+<div class="device-badges">
+<span class="device-badge">Router → r0ut3r</span>
+<span class="device-badge">Switch → sw1tch</span>
+<span class="device-badge">Server → s3rv3r</span>
+<span class="device-badge">Firewall → f1r3w4ll</span>
+<span class="device-badge">Access Point → 4cc3ssp01nt</span>
+<span class="device-badge">DVR → dvr</span>
+<span class="device-badge">NAS → n4s</span>
+<span class="device-badge">Printer → pr1nt3r</span>
+<span class="device-badge">Cámara IP → c4m3r4</span>
+<span class="device-badge">Gateway → g4t3w4y</span>
+</div>
+<p>Cada tipo de dispositivo tiene su propia palabra clave transformada para mayor seguridad.</p>
+</div>
+</div>
+
+<div class="card info-card">
+<div class="card-header">
+<i class="fas fa-question-circle me-2"></i> Ayuda
+</div>
+<div class="card-body">
+<h6>¿Cómo funciona?</h6>
+<ol>
+<li>Selecciona el tipo de contraseña que necesitas</li>
+<li>Completa los campos requeridos</li>
+<li>Presiona "Generar Contraseña"</li>
+<li>Copia la contraseña generada</li>
+</ol>
+<h6 class="mt-3">Ejemplos</h6>
+<ul>
+<li><strong>Dispositivo (Router):</strong> r0ut3rEMPRESA&routermain&24051530</li>
+<li><strong>Dispositivo (Server):</strong> s3rv3rEMPRESA&server01&24051530</li>
+<li><strong>Usuario empresa:</strong> 4cc3ssEMPRESA&gquintero&of&24051530</li>
+<li><strong>Usuario admin:</strong> s3cur3EMPRESA&esset&24051530</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<script>
+// Palabras clave transformadas para cada tipo de contraseña
+const keywordTransforms = {
+  base: "syst3m",
+  user: "4cc3ss",
+  admin: "s3cur3"
+};
+
+// Palabras clave transformadas para dispositivos
+const deviceKeywordTransforms = {
+  router: "r0ut3r",
+  switch: "sw1tch",
+  server: "s3rv3r",
+  firewall: "f1r3w4ll",
+  ap: "4cc3ssp01nt",
+  dvr: "dvr",
+  nas: "n4s",
+  printer: "pr1nt3r",
+  camera: "c4m3r4",
+  gateway: "g4t3w4y"
+};
+
+// Elementos del DOM
+const passwordTypeBtns = document.querySelectorAll('.password-type-btn');
+const instructionsContainer = document.getElementById('instructions-container');
+const generateBtn = document.getElementById('generate-btn');
+const resetBtn = document.getElementById('reset-btn');
+const copyBtn = document.getElementById('copy-btn');
+const passwordDisplay = document.getElementById('password-display');
+const copySuccess = document.getElementById('copy-success');
+const companyInput = document.getElementById('company');
+const separatorInput = document.getElementById('separator');
+const deviceTypeSelect = document.getElementById('device-type');
+const userServiceSelect = document.getElementById('user-service');
+const customServiceGroup = document.getElementById('custom-service-group');
+const currentTimeElement = document.getElementById('current-time');
+
+// Estado actual
+let currentPasswordType = 'base';
+
+// Función para actualizar la hora actual
+function updateCurrentTime() {
+  const now = new Date();
+  const year = String(now.getFullYear()).slice(-2);
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  const seconds = String(now.getSeconds()).padStart(2, '0');
+
+  currentTimeElement.textContent = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+
+  return { year, month, hours, minutes };
+}
+
+// Inicialización
+document.addEventListener('DOMContentLoaded', () => {
+  // Actualizar hora cada segundo
+  updateCurrentTime();
+  setInterval(updateCurrentTime, 1000);
+
+  // Establecer valores por defecto
+  companyInput.value = '';
+
+  // Event listeners
+  passwordTypeBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const type = btn.dataset.type;
+      setPasswordType(type);
+    });
+  });
+
+  generateBtn.addEventListener('click', generatePassword);
+  resetBtn.addEventListener('click', resetForm);
+  copyBtn.addEventListener('click', copyPassword);
+
+  deviceTypeSelect.addEventListener('change', () => {
+    if (deviceTypeSelect.value) {
+      generatePassword();
+    }
+  });
+
+  userServiceSelect.addEventListener('change', () => {
+    if (userServiceSelect.value === 'custom') {
+      customServiceGroup.style.display = 'block';
+    } else {
+      customServiceGroup.style.display = 'none';
+    }
+  });
+
+  // Generar contraseña inicial
+  generatePassword();
+});
+
+// Función para establecer el tipo de contraseña
+function setPasswordType(type) {
+  currentPasswordType = type;
+
+  // Actualizar botones activos
+  passwordTypeBtns.forEach(btn => {
+    btn.classList.remove('active');
+    if (btn.dataset.type === type) {
+      btn.classList.add('active');
+    }
+  });
+
+  // Ocultar todos los campos específicos
+  document.querySelectorAll('.specific-fields').forEach(field => {
+    field.style.display = 'none';
+  });
+
+  // Mostrar campos específicos según el tipo
+  switch (type) {
+    case 'base':
+      updateInstructions('BASE', [
+        'Formato: palabra clave transformada + nombre empresa (mayúsculas) + separador + marca de tiempo (AAMMHHMM)',
+        'Ejemplo: syst3mEMPRESA&24051530',
+        'Uso: contraseñas generales como AnyDesk, RustDesk, bloqueadores USB, correo hosting, etc.'
+      ]);
+      break;
+    case 'device':
+      document.getElementById('device-fields').style.display = 'block';
+      updateInstructions('DISPOSITIVO', [
+        'Formato: palabra clave del dispositivo + nombre empresa (mayúsculas) + separador + hostname + separador + marca de tiempo (AAMMHHMM)',
+        'Ejemplo: r0ut3rEMPRESA&routermain&24051530',
+        'Uso: equipos administrativos como routers, servidores, switches, DVRs, etc.'
+      ]);
+      break;
+    case 'user':
+      document.getElementById('user-fields').style.display = 'block';
+      updateInstructions('USUARIO DE EMPRESA', [
+        'Formato: palabra clave transformada + nombre empresa (mayúsculas) + separador + inicial nombre + apellido + separador + servicio + separador + marca de tiempo (AAMMHHMM)',
+        'Ejemplo: 4cc3ssEMPRESA&gquintero&of&24051530',
+        'Uso: cuentas de usuario para servicios corporativos'
+      ]);
+      break;
+    case 'admin':
+      document.getElementById('admin-fields').style.display = 'block';
+      updateInstructions('USUARIO ADMINISTRATIVO', [
+        'Formato: palabra clave transformada + nombre empresa (mayúsculas) + separador + servicio + separador + marca de tiempo (AAMMHHMM)',
+        'Ejemplo: s3cur3EMPRESA&esset&24051530',
+        'Uso: cuentas administrativas para servicios específicos'
+      ]);
+      break;
+  }
+
+  // Animación de transición
+  document.getElementById('password-form').style.animation = 'none';
+  setTimeout(() => {
+    document.getElementById('password-form').style.animation = 'fadeIn 0.5s ease';
+  }, 10);
+}
+
+// Función para actualizar las instrucciones
+function updateInstructions(title, points) {
+  instructionsContainer.innerHTML = `
+    <div class="instructions">
+      <h5>Contraseña ${title}</h5>
+      <ul>
+        ${points.map(point => `<li>${point}</li>`).join('')}
+      </ul>
+    </div>
+  `;
+}
+
+// Función para generar la contraseña
+function generatePassword() {
+  const company = companyInput.value.toUpperCase();
+  const separator = separatorInput.value;
+  const { year, month, hours, minutes } = updateCurrentTime();
+  const timestamp = `${year}${month}${hours}${minutes}`;
+
+  let password = '';
+  let keyword = '';
+
+  switch (currentPasswordType) {
+    case 'base':
+      keyword = keywordTransforms.base;
+      password = `${keyword}${company}${separator}${timestamp}`;
+      break;
+    case 'device':
+      const deviceType = deviceTypeSelect.value;
+      if (!deviceType) {
+        passwordDisplay.textContent = 'Por favor, selecciona un tipo de dispositivo';
+        return;
+      }
+      keyword = deviceKeywordTransforms[deviceType];
+      const hostname = document.getElementById('hostname').value.toLowerCase();
+      if (!hostname) {
+        passwordDisplay.textContent = 'Por favor, ingresa el nombre del host';
+        return;
+      }
+      password = `${keyword}${company}${separator}${hostname}${separator}${timestamp}`;
+      break;
+    case 'user':
+      keyword = keywordTransforms.user;
+      const firstname = document.getElementById('firstname').value;
+      const lastname = document.getElementById('lastname').value.toLowerCase();
+      let userService = userServiceSelect.value;
+
+      if (!firstname || !lastname) {
+        passwordDisplay.textContent = 'Por favor, ingresa el nombre y apellido del usuario';
+        return;
+      }
+
+      if (userService === 'custom') {
+        userService = document.getElementById('custom-service').value;
+      }
+
+      if (!userService) {
+        passwordDisplay.textContent = 'Por favor, selecciona un servicio';
+        return;
+      }
+
+      password = `${keyword}${company}${separator}${firstname.charAt(0).toLowerCase()}${lastname}${separator}${userService}${separator}${timestamp}`;
+      break;
+    case 'admin':
+      keyword = keywordTransforms.admin;
+      const adminService = document.getElementById('admin-service').value;
+      if (!adminService) {
+        passwordDisplay.textContent = 'Por favor, ingresa el nombre del servicio administrativo';
+        return;
+      }
+      password = `${keyword}${company}${separator}${adminService}${separator}${timestamp}`;
+      break;
+  }
+
+  passwordDisplay.textContent = password;
+  copySuccess.classList.remove('show');
+}
+
+// Función para restablecer el formulario
+function resetForm() {
+  companyInput.value = '';
+  separatorInput.value = '&';
+  deviceTypeSelect.value = '';
+  document.getElementById('hostname').value = '';
+  document.getElementById('firstname').value = '';
+  document.getElementById('lastname').value = '';
+  document.getElementById('user-service').value = '';
+  document.getElementById('custom-service').value = '';
+  document.getElementById('admin-service').value = '';
+  customServiceGroup.style.display = 'none';
+  generatePassword();
+  showNotification('Formulario restablecido', 'success');
+}
+
+// Función para copiar la contraseña
+function copyPassword() {
+  const password = passwordDisplay.textContent;
+
+  if (password.includes('Por favor') || password === 'Presiona "Generar Contraseña" para crear una nueva contraseña') {
+    showNotification('No hay contraseña válida para copiar', 'warning');
+    return;
+  }
+
+  navigator.clipboard.writeText(password)
+    .then(() => {
+      copySuccess.classList.add('show');
+      setTimeout(() => {
+        copySuccess.classList.remove('show');
+      }, 2000);
+      showNotification('Contraseña copiada al portapapeles', 'success');
+    })
+    .catch(err => {
+      showNotification('Error al copiar la contraseña', 'warning');
+      console.error('Error al copiar: ', err);
+    });
+}
+
+// Función para mostrar notificaciones
+function showNotification(message, type) {
+  // Crear elemento de notificación
+  const notification = document.createElement('div');
+  notification.className = `notification ${type}`;
+  notification.innerHTML = `
+    <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
+    <span>${message}</span>
+  `;
+
+  // Añadir al DOM
+  document.body.appendChild(notification);
+
+  // Mostrar con animación
+  setTimeout(() => {
+    notification.classList.add('show');
+  }, 10);
+
+  // Ocultar después de 3 segundos
+  setTimeout(() => {
+    notification.classList.remove('show');
+    setTimeout(() => {
+      document.body.removeChild(notification);
+    }, 300);
+  }, 3000);
+}
+</script>
+</body>
+</html>
